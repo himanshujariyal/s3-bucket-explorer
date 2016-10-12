@@ -2,7 +2,7 @@
 
 A web based folder/bucket explorer in ReactJS framework consuming S3 REST API.
 
-# Specifications:
+## Specifications:
 
 1. *On Page Load:* Only folders/files which are present at the root of bucket are visible.
 2. *If folder is clicked:* It
@@ -26,4 +26,3 @@ Now you're ready to rumble!
 - [Styling](https://github.com/mxstbr/react-boilerplate/tree/master/docs/css): How to work with the CSS tooling
 - [Your app](https://github.com/mxstbr/react-boilerplate/tree/master/docs/js): Supercharging your app with Routing, Redux, simple
   asynchronicity helpers, etc.
-  
