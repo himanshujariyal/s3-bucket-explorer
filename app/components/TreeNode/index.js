@@ -78,6 +78,7 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
         subtree: tree.subtree,
         nodesFetched: tree.nodesFetched,
         isOpen: tree.isOpen,
+        isFetchingNodes: tree.isFetchingNodes,
       },
     };
   }
@@ -85,6 +86,18 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
   onClick() {
     const { tree } = this.state;
     if (!tree.isLeaf && !tree.nodesFetched) {
+      // set fetching true
+      this.setState({
+        tree: {
+          name: tree.name,
+          id: tree.id,
+          isLeaf: tree.isLeaf,
+          subtree: tree.subtree,
+          nodesFetched: true,
+          isOpen: true,
+          isFetchingNodes: true,
+        },
+      });
       // Not leaf
       fetchBucket(tree.name, '/', (formattedData) => {
         this.setState({
@@ -95,6 +108,7 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
             subtree: formattedData,
             nodesFetched: true,
             isOpen: true,
+            isFetchingNodes: false,
           },
         });
       });
@@ -107,6 +121,7 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
           subtree: tree.subtree,
           nodesFetched: tree.nodesFetched,
           isOpen: !tree.isOpen,
+          isFetchingNodes: tree.isFetchingNodes,
         },
       });
     }
@@ -120,7 +135,11 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
       thisNode = (<div className={styles.leafNode}>{tree.name}</div>);
     } else {
       thisNode = (
-        <div onClick={this.onClick.bind(this)} className={styles.folderNode}>{tree.name}</div>
+        <div onClick={this.onClick.bind(this)} className={styles.folderNode}>
+          {tree.isOpen ? '- ' : '> '}
+          {tree.name}
+          {tree.isFetchingNodes ? <span className={styles.loading}> Loading</span> : ''}
+        </div>
       );
     }
     const hiddenStatus = tree.isOpen ? styles.visibleTree : styles.hiddenTree;

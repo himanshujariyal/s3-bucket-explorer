@@ -39,3 +39,8 @@
   height: 0;
   overflow: hidden;
 }
+
+.loading {
+  font-size: 10px;
+  color: red;
+}

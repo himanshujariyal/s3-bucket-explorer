@@ -26,6 +26,7 @@ export class Explorer extends React.Component { // eslint-disable-line react/pre
         subtree: [],
         nodesFetched: false,
         isOpen: false,
+        isFetchingNodes: false,
       },
     };
   }
@@ -40,6 +41,7 @@ export class Explorer extends React.Component { // eslint-disable-line react/pre
           subtree: formattedData,
           nodesFetched: true,
           isOpen: true,
+          isFetchingNodes: false,
         },
       });
     });
