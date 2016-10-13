@@ -5,28 +5,128 @@
 */
 
 import React from 'react';
-
 import styles from './styles.css';
+import shortid from 'shortid';
+import _ from 'lodash';
+import 'aws-sdk/dist/aws-sdk';
+const AWS = window.AWS;
+import api from '../../api';
 
-class TreeNode extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  propTypes: {
+const returnJSONSubTree = function returnJSONSubTree(data, prefix) {
+  const leafData = [];
+  const folderData = [];
+  _.each(data.Contents, (item, index) => {
+    leafData[index] = {
+      name: item.Key.replace(prefix, ''),
+      id: shortid.generate(),
+      isLeaf: true,
+      subtree: [],
+      nodesFetched: false,
+      isOpen: false,
+    };
+  });
+  _.each(data.CommonPrefixes, (item, index) => {
+    folderData[index] = {
+      name: item.Prefix,
+      id: shortid.generate(),
+      isLeaf: false,
+      subtree: [],
+      nodesFetched: false,
+      isOpen: false,
+    };
+  });
+  return leafData.concat(folderData);
+};
+
+export const fetchBucket = function fetchBucket(prefix, delimiter, cb) {
+  AWS.config.update({
+    signatureVersion: 'v4',
+    accessKeyId: api.secrets.data.accessKeyId,
+    secretAccessKey: api.secrets.data.secretAccessKey,
+  });
+  AWS.config.region = api.secrets.data.region;
+
+  // create the AWS.Request object
+  const request = new AWS.S3().listObjects({
+    Bucket: 'frontendskills',
+    Prefix: !_.isNil(prefix) ? prefix : undefined,
+    Delimiter: !_.isNil(delimiter) ? delimiter : undefined,
+  }, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const formattedData = returnJSONSubTree(data, prefix);
+      cb(formattedData);
+    }
+  }
+ );
+};
+
+export class TreeNode extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
     tree: React.PropTypes.any.isRequired,
-    onClick: React.PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    const { tree } = props;
+    this.state = {
+      tree: {
+        name: tree.name,
+        id: tree.id,
+        isLeaf: tree.isLeaf,
+        subtree: tree.subtree,
+        nodesFetched: tree.nodesFetched,
+        isOpen: tree.isOpen,
+      },
+    };
+  }
+
+  onClick() {
+    const { tree } = this.state;
+    if (!tree.isLeaf && !tree.nodesFetched) {
+      // Not leaf
+      fetchBucket(tree.name, '/', (formattedData) => {
+        this.setState({
+          tree: {
+            name: tree.name,
+            id: tree.id,
+            isLeaf: tree.isLeaf,
+            subtree: formattedData,
+            nodesFetched: true,
+            isOpen: true,
+          },
+        });
+      });
+    } else if (tree.nodesFetched && !tree.isLeaf) {
+      this.setState({
+        tree: {
+          name: tree.name,
+          id: tree.id,
+          isLeaf: tree.isLeaf,
+          subtree: tree.subtree,
+          nodesFetched: tree.nodesFetched,
+          isOpen: !tree.isOpen,
+        },
+      });
+    }
+  }
 
   render() {
     // debugger;
-    const { tree, onClick } = this.props;
+    const { tree } = this.state;
     let thisNode;
     if (tree.isLeaf) {
       thisNode = (<div className={styles.leafNode}>{tree.name}</div>);
     } else {
       thisNode = (
-        <div className={styles.folderNode}>{tree.name}</div>
+        <div onClick={this.onClick.bind(this)} className={styles.folderNode}>{tree.name}</div>
       );
     }
-
-    const subNode = tree.subtree.map((node) => <TreeNode key={node.id} onClick={onClick} tree={node} />);
+    const hiddenStatus = tree.isOpen ? styles.visibleTree : styles.hiddenTree;
+    const subNode = tree.subtree.map((node) => {
+      return (<div key={node.id} className={hiddenStatus}><TreeNode tree={node} /></div>);
+    });
     return (
       <div className={styles.treeNode}>
         {thisNode}
@@ -36,4 +136,7 @@ class TreeNode extends React.Component { // eslint-disable-line react/prefer-sta
   }
 }
 
-export default TreeNode;
+export default {
+  TreeNode,
+  fetchBucket,
+};

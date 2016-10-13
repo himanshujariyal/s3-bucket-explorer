@@ -9,12 +9,10 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import selectExplorer from './selectors';
 import styles from './styles.css';
-import api from '../../api';
-import _ from 'lodash';
 import shortid from 'shortid';
-import 'aws-sdk/dist/aws-sdk';
-const AWS = window.AWS;
-import TreeNode from '../../components/TreeNode';
+
+import { fetchBucket, TreeNode } from '../../components/TreeNode';
+
 export class Explorer extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -33,65 +31,19 @@ export class Explorer extends React.Component { // eslint-disable-line react/pre
   }
 
   componentDidMount() {
-    AWS.config.update({
-      signatureVersion: 'v4',
-      accessKeyId: api.secrets.data.accessKeyId,
-      secretAccessKey: api.secrets.data.secretAccessKey,
+    fetchBucket('', '/', (formattedData) => {
+      this.setState({
+        tree: {
+          name: 'Explorer',
+          id: shortid.generate(),
+          isLeaf: true,
+          subtree: formattedData,
+          nodesFetched: true,
+          isOpen: true,
+        },
+      });
     });
-    AWS.config.region = api.secrets.data.region;
-    this.fetchBucket(null, '/');
-  }
-
-  returnJSONSubTree(data) {
-    const leafData = [];
-    const folderData = [];
-    _.each(data.Contents, (item, index) => {
-      leafData[index] = {
-        name: item.Key,
-        id: shortid.generate(),
-        isLeaf: true,
-        subtree: [],
-        nodesFetched: true,
-        isOpen: false,
-      };
-    });
-    _.each(data.CommonPrefixes, (item, index) => {
-      folderData[index] = {
-        name: item.Prefix,
-        id: shortid.generate(),
-        isLeaf: false,
-        subtree: [],
-        nodesFetched: false,
-        isOpen: false,
-      };
-    });
-    return leafData.concat(folderData);
-  }
-
-  fetchBucket(prefix, delimiter, id) {
-    // create the AWS.Request object
-    const request = new AWS.S3().listObjects({
-      Bucket: 'frontendskills',
-      Prefix: !_.isNil(prefix) ? prefix : undefined,
-      Delimiter: !_.isNil(delimiter) ? delimiter : undefined,
-    }, (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        const formattedData = this.returnJSONSubTree(data);
-        this.setState({
-          tree: {
-            name: 'Explorer',
-            id: shortid.generate(),
-            isLeaf: true,
-            subtree: formattedData,
-            nodesFetched: true,
-            isOpen: true,
-          },
-        });
-      }
-    }
-   );
+    // debugger;
   }
 
   render() {

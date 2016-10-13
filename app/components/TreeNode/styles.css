@@ -1,15 +1,41 @@
 .treeNode {
   margin-left: 10px;
+  background-color: #EFEFEF;
+  max-width: 450px;
+  border-left: 1px dashed #D6D6D6;
 }
 
 .leafNode {
   margin-left: 0px;
   list-style: none;
+  background-color: #ECECEC;
+  padding: 2px 10px;
 }
 
 .folderNode {
   margin-left: 0px;
-  text-indent: 0px;
-  background-color: #EEE;
   list-style: none;
+  background-color: rgb(208, 208, 208);
+  border-bottom: 2px solid #999;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
+  transition: all cubic-bezier(0, 0, 0, 1.05) 200ms;
+}
+
+.folderNode:hover {
+    background-color: #999;
+}
+
+.visibleTree {
+  opacity: 1;
+  height: auto;
+}
+
+.hiddenTree {
+  transition: height 5s ease-out;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
 }
