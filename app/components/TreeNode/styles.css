@@ -1,0 +1,15 @@
+.treeNode {
+  margin-left: 10px;
+}
+
+.leafNode {
+  margin-left: 0px;
+  list-style: none;
+}
+
+.folderNode {
+  margin-left: 0px;
+  text-indent: 0px;
+  background-color: #EEE;
+  list-style: none;
+}

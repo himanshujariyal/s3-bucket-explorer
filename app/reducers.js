@@ -9,7 +9,6 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import explorerReducer from 'containers/Explorer/reducer';
 
-
 /*
  * routeReducer
  *
