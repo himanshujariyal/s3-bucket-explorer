@@ -2,7 +2,7 @@
 
 A web based folder/bucket explorer in ReactJS framework consuming S3 REST API.
 
-[![Demo Image](https://github.com/himanshujariyal/s3-bucket-explorer/tree/development/app/demo_image.png)]()  
+[![Demo Image](https://github.com/himanshujariyal/s3-bucket-explorer/blob/development/app/demo_image.png?raw=true)]()  
 
 ## Specifications:
 
