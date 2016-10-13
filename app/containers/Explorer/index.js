@@ -22,6 +22,7 @@ export class Explorer extends React.Component { // eslint-disable-line react/pre
       tree: {
         name: 'Explorer',
         id: shortid.generate(),
+        prefix: '',
         isLeaf: false,
         subtree: [],
         nodesFetched: false,
@@ -36,6 +37,7 @@ export class Explorer extends React.Component { // eslint-disable-line react/pre
       this.setState({
         tree: {
           name: 'Explorer',
+          prefix: '',
           id: shortid.generate(),
           isLeaf: true,
           subtree: formattedData,

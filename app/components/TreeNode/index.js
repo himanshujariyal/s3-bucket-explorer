@@ -15,9 +15,11 @@ import api from '../../api';
 const returnJSONSubTree = function returnJSONSubTree(data, prefix) {
   const leafData = [];
   const folderData = [];
+  debugger;
   _.each(data.Contents, (item, index) => {
     leafData[index] = {
       name: item.Key.replace(prefix, ''),
+      prefix: item.Key,
       id: shortid.generate(),
       isLeaf: true,
       subtree: [],
@@ -27,7 +29,8 @@ const returnJSONSubTree = function returnJSONSubTree(data, prefix) {
   });
   _.each(data.CommonPrefixes, (item, index) => {
     folderData[index] = {
-      name: item.Prefix,
+      name: item.Prefix.replace(prefix, ''),
+      prefix: item.Prefix,
       id: shortid.generate(),
       isLeaf: false,
       subtree: [],
@@ -73,6 +76,7 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
     this.state = {
       tree: {
         name: tree.name,
+        prefix: tree.prefix,
         id: tree.id,
         isLeaf: tree.isLeaf,
         subtree: tree.subtree,
@@ -90,6 +94,7 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
       this.setState({
         tree: {
           name: tree.name,
+          prefix: tree.prefix,
           id: tree.id,
           isLeaf: tree.isLeaf,
           subtree: tree.subtree,
@@ -99,10 +104,11 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
         },
       });
       // Not leaf
-      fetchBucket(tree.name, '/', (formattedData) => {
+      fetchBucket(tree.prefix, '/', (formattedData) => {
         this.setState({
           tree: {
             name: tree.name,
+            prefix: tree.prefix,
             id: tree.id,
             isLeaf: tree.isLeaf,
             subtree: formattedData,
@@ -116,6 +122,7 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
       this.setState({
         tree: {
           name: tree.name,
+          prefix: tree.prefix,
           id: tree.id,
           isLeaf: tree.isLeaf,
           subtree: tree.subtree,
