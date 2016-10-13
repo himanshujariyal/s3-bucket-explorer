@@ -2,6 +2,9 @@
 
 A web based folder/bucket explorer in ReactJS framework consuming S3 REST API.
 
+Inline-style:
+![alt text](https://github.com/himanshujariyal/s3-bucket-explorer/tree/development/app/demo_image.png "Demo Image")
+
 ## Specifications:
 
 1. *On Page Load:* Only folders/files which are present at the root of bucket are visible.

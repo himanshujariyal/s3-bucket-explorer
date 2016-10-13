@@ -15,7 +15,6 @@ import api from '../../api';
 const returnJSONSubTree = function returnJSONSubTree(data, prefix) {
   const leafData = [];
   const folderData = [];
-  debugger;
   _.each(data.Contents, (item, index) => {
     leafData[index] = {
       name: item.Key.replace(prefix, ''),
