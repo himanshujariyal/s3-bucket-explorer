@@ -49,7 +49,7 @@ export const fetchBucket = function fetchBucket(prefix, delimiter, cb) {
   AWS.config.region = api.secrets.data.region;
 
   // create the AWS.Request object
-  const request = new AWS.S3().listObjects({
+  new AWS.S3().listObjects({
     Bucket: api.secrets.data.bucket,
     Prefix: !_.isNil(prefix) ? prefix : undefined,
     Delimiter: !_.isNil(delimiter) ? delimiter : undefined,
@@ -137,20 +137,24 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
     const { tree } = this.state;
     let thisNode;
     if (tree.isLeaf) {
-      thisNode = (<div onClick={this.onClickLeaf.bind(this, tree.prefix)} className={styles.leafNode}>{tree.name}</div>);
+      thisNode = (
+        <div onClick={this.onClickLeaf.bind(this, tree.prefix)} className={styles.leafNode}>
+          <span>{tree.name}</span>
+        </div>
+      );
     } else {
+      const openFolder = (<span className={styles.padRight}><i className="glyphicon glyphicon-triangle-bottom"></i> <i className="glyphicon glyphicon-folder-open"></i></span>);
+      const closeFolder = (<span className={styles.padRight}><i className="glyphicon glyphicon-triangle-right"></i> <i className="glyphicon glyphicon-folder-close"></i></span>);
       thisNode = (
         <div onClick={this.onClickFolder.bind(this)} className={styles.folderNode}>
-          {tree.isOpen ? '- ' : '> '}
-          {tree.name}
-          {tree.isFetchingNodes ? <span className={styles.loading}> Loading</span> : ''}
+          {tree.isOpen ? openFolder : closeFolder}
+          <span>{tree.name}</span>
+          {tree.isFetchingNodes ? <span className={styles.loading}><i className="glyphicon glyphicon-refresh"></i></span> : ' '}
         </div>
       );
     }
     const hiddenStatus = tree.isOpen ? styles.visibleTree : styles.hiddenTree;
-    const subNode = tree.subtree.map((node) => {
-      return (<div key={node.id} className={hiddenStatus}><TreeNode tree={node} /></div>);
-    });
+    const subNode = tree.subtree.map((node) => <div key={node.id} className={hiddenStatus}><TreeNode tree={node} /></div>);
     return (
       <div className={styles.treeNode}>
         {thisNode}

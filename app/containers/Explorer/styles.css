@@ -1,3 +1,10 @@
 .explorer { /* stylelint-disable */
+}
 
+.container {
+  margin-top: 10px;
+  background: #FFF;
+  width: 500px;
+  border: 1px solid #EEE;
+  padding: 15px 10px;
 }

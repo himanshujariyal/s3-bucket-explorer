@@ -2,7 +2,7 @@
 
 A web based folder/bucket explorer in ReactJS framework consuming S3 REST API.
 
-[![Demo Image](https://github.com/himanshujariyal/s3-bucket-explorer/blob/development/app/demoImage.png?raw=true)]()  
+[![Demo Image](https://github.com/himanshujariyal/s3-bucket-explorer/blob/development/app/demo_img.png?raw=true)]()  
 
 ## Specifications:
 
@@ -15,7 +15,7 @@ A web based folder/bucket explorer in ReactJS framework consuming S3 REST API.
 ## Quick start
 
 1. This repo is made using the boilerplate `https://github.com/mxstbr/react-boilerplate`.
-2. Clone the repo and install npm packages using 'npm install'.
+2. Clone the repo and install npm packages using `npm install`.
 3. Add s3Secrets.js file in `app/api`.
 4. Run `npm start` to see the app at `http://localhost:3000`.
 5. Run `npm run build` to build the app.

@@ -51,7 +51,6 @@ export class Explorer extends React.Component { // eslint-disable-line react/pre
   }
 
   render() {
-    const { onClick } = this.props;
     return (
       <div className={styles.explorer}>
         <Helmet
@@ -62,7 +61,9 @@ export class Explorer extends React.Component { // eslint-disable-line react/pre
         />
         <h3>S3 Bucket Explorer</h3>
         <small>A web based folder/bucket explorer in ReactJS framework consuming S3 REST API.</small>
-        <TreeNode onClick={onClick} tree={this.state.tree} key={this.state.tree.id} />
+        <div className={styles.container}>
+          <TreeNode tree={this.state.tree} key={this.state.tree.id} />
+        </div>
       </div>
     );
   }
@@ -72,9 +73,6 @@ const mapStateToProps = selectExplorer();
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick() {
-      alert('Clicked');
-    },
     dispatch,
   };
 }
