@@ -39,7 +39,7 @@ export class Explorer extends React.Component { // eslint-disable-line react/pre
           name: 'Explorer',
           prefix: '',
           id: shortid.generate(),
-          isLeaf: true,
+          isLeaf: false,
           subtree: formattedData,
           nodesFetched: true,
           isOpen: true,

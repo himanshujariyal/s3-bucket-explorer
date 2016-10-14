@@ -50,12 +50,12 @@ export const fetchBucket = function fetchBucket(prefix, delimiter, cb) {
 
   // create the AWS.Request object
   const request = new AWS.S3().listObjects({
-    Bucket: 'frontendskills',
+    Bucket: api.secrets.data.bucket,
     Prefix: !_.isNil(prefix) ? prefix : undefined,
     Delimiter: !_.isNil(delimiter) ? delimiter : undefined,
   }, (err, data) => {
     if (err) {
-      console.log(err);
+      alert(err);
     } else {
       const formattedData = returnJSONSubTree(data, prefix);
       cb(formattedData);
@@ -72,21 +72,10 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
   constructor(props) {
     super(props);
     const { tree } = props;
-    this.state = {
-      tree: {
-        name: tree.name,
-        prefix: tree.prefix,
-        id: tree.id,
-        isLeaf: tree.isLeaf,
-        subtree: tree.subtree,
-        nodesFetched: tree.nodesFetched,
-        isOpen: tree.isOpen,
-        isFetchingNodes: tree.isFetchingNodes,
-      },
-    };
+    this.state = Object.assign({}, { tree });
   }
 
-  onClick() {
+  onClickFolder() {
     const { tree } = this.state;
     if (!tree.isLeaf && !tree.nodesFetched) {
       // set fetching true
@@ -133,15 +122,25 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
     }
   }
 
+  onClickLeaf(key) {
+    new AWS.S3().getSignedUrl('getObject', { Bucket: api.secrets.data.bucket, Key: key, Expires: 60 }, (err, url) => {
+      const win = window.open(url, '_blank');
+      win.focus();
+    });
+    // new AWS.S3().getObject({ Bucket: api.secrets.data.bucket, Key: key }).on('success', function(response) {
+    //   console.log("Key was", response.request.params.Key);
+    // }).send();
+  }
+
   render() {
     // debugger;
     const { tree } = this.state;
     let thisNode;
     if (tree.isLeaf) {
-      thisNode = (<div className={styles.leafNode}>{tree.name}</div>);
+      thisNode = (<div onClick={this.onClickLeaf.bind(this, tree.prefix)} className={styles.leafNode}>{tree.name}</div>);
     } else {
       thisNode = (
-        <div onClick={this.onClick.bind(this)} className={styles.folderNode}>
+        <div onClick={this.onClickFolder.bind(this)} className={styles.folderNode}>
           {tree.isOpen ? '- ' : '> '}
           {tree.name}
           {tree.isFetchingNodes ? <span className={styles.loading}> Loading</span> : ''}

@@ -4,6 +4,7 @@ export const data = {
   accessKeyId: '',
   secretAccessKey: '',
   region: 'ap-south-1',
+  bucket: 'bucket-name',
 };
 
 export default {

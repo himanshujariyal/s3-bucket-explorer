@@ -10,6 +10,11 @@
   list-style: none;
   background-color: #ECECEC;
   padding: 2px 10px;
+  cursor: pointer;
+}
+
+.leafNode:hover {
+  background-color: #BECDDA;
 }
 
 .folderNode {
