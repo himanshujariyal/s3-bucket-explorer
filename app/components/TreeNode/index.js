@@ -141,9 +141,10 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
     } else {
       thisNode = (
         <div onClick={this.onClickFolder.bind(this)} className={styles.folderNode}>
-          {tree.isOpen ? '- ' : '> '}
+          {tree.isOpen ? <i className="glyphicon glyphicon-folder-open"></i> : <i className="glyphicon glyphicon-folder-close"></i>}
+          {' '}
           {tree.name}
-          {tree.isFetchingNodes ? <span className={styles.loading}> Loading</span> : ''}
+          {tree.isFetchingNodes ? <span className={styles.loading}><i className="glyphicon glyphicon-refresh"></i></span> : ''}
         </div>
       );
     }
