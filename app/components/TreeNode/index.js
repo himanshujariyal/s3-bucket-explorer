@@ -49,7 +49,7 @@ export const fetchBucket = function fetchBucket(prefix, delimiter, cb) {
   AWS.config.region = api.secrets.data.region;
 
   // create the AWS.Request object
-  const request = new AWS.S3().listObjects({
+  new AWS.S3().listObjects({
     Bucket: api.secrets.data.bucket,
     Prefix: !_.isNil(prefix) ? prefix : undefined,
     Delimiter: !_.isNil(delimiter) ? delimiter : undefined,
@@ -151,9 +151,7 @@ export class TreeNode extends React.Component { // eslint-disable-line react/pre
       );
     }
     const hiddenStatus = tree.isOpen ? styles.visibleTree : styles.hiddenTree;
-    const subNode = tree.subtree.map((node) => {
-      return (<div key={node.id} className={hiddenStatus}><TreeNode tree={node} /></div>);
-    });
+    const subNode = tree.subtree.map((node) => <div key={node.id} className={hiddenStatus}><TreeNode tree={node} /></div>);
     return (
       <div className={styles.treeNode}>
         {thisNode}
