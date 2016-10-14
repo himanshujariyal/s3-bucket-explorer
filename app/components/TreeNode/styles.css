@@ -6,31 +6,24 @@
 }
 
 .leafNode {
-  margin-left: 0px;
-  list-style: none;
-  background-color: #ECECEC;
   padding: 2px 10px;
   cursor: pointer;
 }
 
 .leafNode:hover {
-  background-color: #BECDDA;
+  background-color: #DDD;
 }
 
 .folderNode {
-  margin-left: 0px;
-  list-style: none;
-  background-color: rgb(208, 208, 208);
-  border-bottom: 2px solid #999;
   cursor: pointer;
-  padding: 3px 5px;
+  padding: 5px 5px;
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
   transition: all cubic-bezier(0, 0, 0, 1.05) 200ms;
 }
 
 .folderNode:hover {
-    background-color: #999;
+    background-color: #DDD;
 }
 
 .visibleTree {
@@ -47,4 +40,15 @@
 
 .loading {
   font-size: 10px;
+  padding-left: 10px;
+  color: #a94442;
+}
+
+.padLeft {
+  padding-left: 3px;
+}
+
+.padRight {
+  padding-right: 8px;
+  font-size: 12px;
 }
